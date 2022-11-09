@@ -286,6 +286,10 @@ a{
 .modal-backdrop{
     display: none !important;
 }
+.disable{
+    pointer-events: none !important;
+    opacity: 0.5;
+}
 
 /* sidebar end-------<<<<<<< */
 

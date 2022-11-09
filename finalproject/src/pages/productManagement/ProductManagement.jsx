@@ -1,6 +1,6 @@
 import React from 'react';
 import AddProduct from './AddProduct';
-import ProductManagmentTable from './ProductManagmentTable';
+import ProductManagmentTable from './ProductManagementTable';
 
 const ProductManagment = () => {
     return (
