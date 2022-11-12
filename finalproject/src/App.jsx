@@ -1,11 +1,14 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import Index from './layouts/adminLayout/Index';
 
 const App = () => {
     return (
-        <div>
-            <Index/>
-        </div>
+        <BrowserRouter>
+            <div>
+                <Index />
+            </div>
+        </BrowserRouter>
     );
 }
 

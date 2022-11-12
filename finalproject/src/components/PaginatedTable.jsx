@@ -107,9 +107,10 @@ const PaginatedTable = ({ children, data, dataInfo, additionalField, numOfPages,
                     ) : null
                 }
             </div>
-            <input type="number"
+            
+            {/* <input type="number" pattern="[1-9]" className='special'
                 onChange={(e) => setNumOfPage(e.target.value)}
-            />
+            /> */}
         </>
     );
 }
