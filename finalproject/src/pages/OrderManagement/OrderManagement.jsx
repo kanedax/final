@@ -1,6 +1,7 @@
 import React from 'react';
 import OrderManagementTable from './OrderManagementTable';
 import OrderTable from './AddOrder';
+import OrderDetails from './OrderDetails';
 
 const OrderManagement = () => {
     return (
@@ -20,6 +21,7 @@ const OrderManagement = () => {
                 </div>
             </div>
             <OrderManagementTable/>
+            <OrderDetails/>
         </div>
     );
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import AddProduct from './AddProduct';
 import ProductManagmentTable from './ProductManagementTable';
+import SetAttribute from './SetAttribute';
 
 const ProductManagment = () => {
     return (
@@ -14,13 +15,11 @@ const ProductManagment = () => {
                     </div>
                 </div>
                 <div className="col-2 col-md-6 col-lg-4 d-flex flex-column align-items-end">
-                    <button className="btn btn-success d-flex justify-content-center align-items-center" data-bs-toggle="modal" data-bs-target="#add_product_modal">
-                        <i className="fas fa-plus text-light"></i>
-                    </button>
+                    <AddProduct />
                 </div>
             </div>
-            <AddProduct />
             <ProductManagmentTable />
+            <SetAttribute/>
         </div>
     );
 }
