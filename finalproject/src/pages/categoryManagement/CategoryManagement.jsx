@@ -1,6 +1,5 @@
 import React from 'react';
 import AddAttributes from './AddAttributes';
-import AddCategory from './AddCategory';
 import CategoryManagmentTable from './CategoryManagementTable';
 
 const CategoryManagment = () => {

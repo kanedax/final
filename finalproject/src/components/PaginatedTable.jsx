@@ -8,26 +8,25 @@ const PaginatedTable = ({ children, data, dataInfo, additionalField, numOfPages,
     const [pages, setPages] = useState([]);
     const [pageCount, setPageCount] = useState(1);
     const [seacrhChart, setSearchChart] = useState("");
-    const [numOfPage, setNumOfPage] = useState(numOfPages);
 
     useEffect(() => {
-            let pCount = Math.ceil(initData.length / numOfPage);
+            let pCount = Math.ceil(initData.length / numOfPages);
             setPageCount(pCount);
             let pArry = []
             for (let i = 1; i <= pCount; i++) pArry = [...pArry, i];
             setPages(pArry);
-    }, [initData, numOfPage])
+    }, [initData])
 
     useEffect(() => {
-            let start = (currentPage * numOfPage) - numOfPage
-            let end = (currentPage * numOfPage)
+            let start = (currentPage * numOfPages) - numOfPages
+            let end = (currentPage * numOfPages)
             setTableData(initData.slice(start, end))
-    }, [currentPage, initData,numOfPage])
+    }, [currentPage, initData])
 
     useEffect(() => {
         setInitData(data.filter(d => d[searchParams.searchField].includes(seacrhChart)));
         setCurrentPage(1);
-    }, [seacrhChart])
+    }, [seacrhChart, data])
 
     return (
         <>
@@ -55,9 +54,9 @@ const PaginatedTable = ({ children, data, dataInfo, additionalField, numOfPages,
                                 <th key={i.field} >{i.title}</th>
                             ))}
                             {
-                                additionalField ? (
-                                    <th>{additionalField.title}</th>
-                                ) : null
+                                additionalField ? additionalField.map((a , index)=>(
+                                    <th key={a.id+"__"+index} >{a.title}</th>
+                                )) : null
                             }
                         </tr>
                     </thead>
@@ -68,9 +67,9 @@ const PaginatedTable = ({ children, data, dataInfo, additionalField, numOfPages,
                                     <th key={i.field + "_" + d.id} >{d[i.field]}</th>
                                 ))}
                                 {
-                                    additionalField ? (
-                                        <th>{additionalField.elements(d.id)}</th>
-                                    ) : null
+                                    additionalField ? additionalField.map((a , index)=>(
+                                        <td key={a.id+"_"+index} >{a.elements(d)}</td>
+                                    )) : null
                                 }
                             </tr>
                         ))}
@@ -107,10 +106,6 @@ const PaginatedTable = ({ children, data, dataInfo, additionalField, numOfPages,
                     ) : null
                 }
             </div>
-            
-            {/* <input type="number" pattern="[1-9]" className='special'
-                onChange={(e) => setNumOfPage(e.target.value)}
-            /> */}
         </>
     );
 }

@@ -1,12 +1,11 @@
 
 import React from "react";
-import { FastField, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import AuthFormikControl from '../../components/AuthForm/AuthFormikControl';
-import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 import { Alert } from "../../utils/Alert";
-import httpServices from "../../services/httpServices";
+import { loginService } from "../../services/Auth";
 
 
 const initialValues = {
@@ -14,24 +13,28 @@ const initialValues = {
   password: "",
   remember: false,
 };
-const onSubmit = (values, submitMethods, navigate) => {
+const onSubmit = async (values, submitMethods, navigate) => {
 
-  httpServices("/auth/login", "post", {
-    ...values,
-    remember: values.remember ? 1 : 0
+  try {
 
-  }).then(res => {
+    const res = await loginService(values);
+
     if (res.status == 200) {
       localStorage.setItem('loginToken', JSON.stringify(res.data));
       navigate('/')
+
     } else {
-      Alert('متاسفم...!', res.data.message, 'error');
+
+      Alert("متاسفم...!", res.data.message, "error");
     }
     submitMethods.setSubmitting(false)
-  }).catch(error => {
+
+  } catch (error) {
+
     submitMethods.setSubmitting(false)
     Alert("متاسفم...!", "متاسفانه مشکلی از سمت سرور رخ داده", "error");
-  });
+  }
+
 };
 const validationSchema = Yup.object({
   phone: Yup.number().required("لطفا این قسمت را پر کنید"),
@@ -50,7 +53,6 @@ const Login = () => {
       validationSchema={validationSchema}
     >
       {(formik) => {
-        console.log(formik);
         return (
           <div >
             <Form >
