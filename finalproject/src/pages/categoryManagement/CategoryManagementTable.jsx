@@ -1,40 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { Outlet, useLocation, useParams } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 import PaginatedTable from '../../components/PaginatedTable';
 import { getCategoryService } from '../../services/CategoryService';
-import { Alert } from '../../utils/Alert';
 import AddCategory from './AddCategory';
 import Action from './AdditionalField/Action';
 import ShowInMenu from './AdditionalField/ShowInMenu';
-import JMoment from "jalali-moment";
 import { JalaliConvert } from '../../utils/JalaliConvert';
 
 const CategoryManagmentTable = () => {
 
     const params = useParams();
 
-    const location = useLocation()
+    const [data, setData] = useState([]);
 
-    const [data, setData] = useState([])
+    const [forceRender, setForceRender] = useState(0);
+
+    const [loading , setLoading] = useState(false)
 
     const handleGetCategories = async () => {
 
         try {
+            setLoading(true)
             const res = await getCategoryService(params.CategoryManagementId)
             if (res.status === 200) {
                 setData(res.data.data)
-            } else {
-                Alert("مشکل!", res.data.message, "error");
             }
+        } catch (error) { 
 
-        } catch (error) {
-            Alert("مشکل!", "مشکلی از سمت سرور رخ داده است", "error");
+        } finally{
+            setLoading(false)
         }
     }
 
     useEffect(() => {
         handleGetCategories()
-    }, [params]);
+    }, [params, forceRender]);
 
     const dataInfo = [
         { field: "id", title: "#" },
@@ -63,21 +63,16 @@ const CategoryManagmentTable = () => {
     return (
         <>
             <Outlet />
-            {
-                data.length ? (
-                    <PaginatedTable
-                        numOfPages={5}
-                        data={data}
-                        dataInfo={dataInfo}
-                        additionalField={additionalField}
-                        searchParams={searchParams}
-                    >
-                    <AddCategory />
-                    </PaginatedTable>
-                ) : (
-                    <h4 className='text-center text-danger' >هیچ دسته بندی یافت نشد</h4>
-                )
-            }
+            <PaginatedTable
+                numOfPages={10}
+                data={data}
+                dataInfo={dataInfo}
+                additionalField={additionalField}
+                searchParams={searchParams}
+                loading={loading}
+            >
+                <AddCategory setForceRender={setForceRender} />
+            </PaginatedTable>
         </>
     );
 }

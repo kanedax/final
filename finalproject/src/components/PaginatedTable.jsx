@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import SpinerLoader from './SpinerLoader';
 
-const PaginatedTable = ({ children, data, dataInfo, additionalField, numOfPages, searchParams }) => {
+const PaginatedTable = ({ children, data, dataInfo, additionalField, numOfPages, searchParams, loading }) => {
 
     const [initData, setInitData] = useState(data)
     const [tableData, setTableData] = useState([]);
@@ -10,17 +11,17 @@ const PaginatedTable = ({ children, data, dataInfo, additionalField, numOfPages,
     const [seacrhChart, setSearchChart] = useState("");
 
     useEffect(() => {
-            let pCount = Math.ceil(initData.length / numOfPages);
-            setPageCount(pCount);
-            let pArry = []
-            for (let i = 1; i <= pCount; i++) pArry = [...pArry, i];
-            setPages(pArry);
+        let pCount = Math.ceil(initData.length / numOfPages);
+        setPageCount(pCount);
+        let pArry = []
+        for (let i = 1; i <= pCount; i++) pArry = [...pArry, i];
+        setPages(pArry);
     }, [initData])
 
     useEffect(() => {
-            let start = (currentPage * numOfPages) - numOfPages
-            let end = (currentPage * numOfPages)
-            setTableData(initData.slice(start, end))
+        let start = (currentPage * numOfPages) - numOfPages
+        let end = (currentPage * numOfPages)
+        setTableData(initData.slice(start, end))
     }, [currentPage, initData])
 
     useEffect(() => {
@@ -47,34 +48,42 @@ const PaginatedTable = ({ children, data, dataInfo, additionalField, numOfPages,
                 </div>
             </div>
             <div>
-                <table className="table table-responsive text-center table-hover table-bordered">
-                    <thead className="table-secondary">
-                        <tr>
-                            {dataInfo.map(i => (
-                                <th key={i.field} >{i.title}</th>
-                            ))}
-                            {
-                                additionalField ? additionalField.map((a , index)=>(
-                                    <th key={a.id+"__"+index} >{a.title}</th>
-                                )) : null
-                            }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {tableData.map(d => (
-                            <tr key={d.id} >
-                                {dataInfo.map(i => (
-                                    <th key={i.field + "_" + d.id} >{d[i.field]}</th>
+                {
+                    loading ? (
+                        <SpinerLoader colorclass={'text-primary'} />
+                    ) : data.length ? (
+                        <table className="table table-responsive text-center table-hover table-bordered">
+                            <thead className="table-secondary">
+                                <tr>
+                                    {dataInfo.map(i => (
+                                        <th key={i.field} >{i.title}</th>
+                                    ))}
+                                    {
+                                        additionalField ? additionalField.map((a, index) => (
+                                            <th key={a.id + "__" + index} >{a.title}</th>
+                                        )) : null
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {tableData.map(d => (
+                                    <tr key={d.id} >
+                                        {dataInfo.map(i => (
+                                            <th key={i.field + "_" + d.id} >{d[i.field]}</th>
+                                        ))}
+                                        {
+                                            additionalField ? additionalField.map((a, index) => (
+                                                <td key={a.id + "_" + index} >{a.elements(d)}</td>
+                                            )) : null
+                                        }
+                                    </tr>
                                 ))}
-                                {
-                                    additionalField ? additionalField.map((a , index)=>(
-                                        <td key={a.id+"_"+index} >{a.elements(d)}</td>
-                                    )) : null
-                                }
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                            </tbody>
+                        </table>
+                    ) : (
+                        <h4 className='text-center text-danger' >هیچ دسته بندی یافت نشد</h4>
+                    )
+                }
                 {
                     pages.length > 1 ? (
                         <nav aria-label="Page navigation example" className="d-flex justify-content-center">

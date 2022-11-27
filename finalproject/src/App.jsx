@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import AdminLayout from './layouts/adminLayout/Index';
 import AuthLayout from './layouts/Auth/AuthLayout';
 
